@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "../includes/philo.h"
 
 long	ft_atol(char const *str)
 {

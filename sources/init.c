@@ -1,4 +1,5 @@
-#include "philo.h"
+#include "../includes/philo.h"
+
 
 int	init_threads(t_data *data, t_philo *philo)
 {
@@ -7,22 +8,22 @@ int	init_threads(t_data *data, t_philo *philo)
 
 	i = -1;
 	th = malloc(sizeof(pthread_t) * data->n_philosopher);
+	data->list_th = th;
 	while (++i < data->n_philosopher)
 	{
 		if (pthread_create(&th[i], NULL, &routine, &philo[i]) != 0)
 			return (1);
 	}
-	if (observer(philo, data) != 0)
-	{
-		i = -1;
-		while (++i < data->n_philosopher)
-			pthread_join(&th[i], NULL);
-		ft_free(data, philo, th);
-		return (1);
-	}
+	// if (observer(philo) == 1)
+	// {
+	// 	i = -1;
+	// 	while (++i < data->n_philosopher)
+	// 		pthread_detach(th[i]);
+	// 	return (0);		
+	// }
 	i = -1;
 	while (++i < data->n_philosopher)
-		pthread_join(&th[i], NULL);
+		pthread_join(th[i], NULL);
 	return (0);
 }
 
@@ -47,7 +48,8 @@ int init_data(int ac, char **argv, t_data *data)
 	data->t_die = ft_atol(argv[2]);
 	data->t_eat = ft_atol(argv[3]);
 	data->t_slp = ft_atol(argv[4]);
-	data->N_MUTEX = 5;
+	data->N_MUTEX = 8;
+	data->status = 1;
 	if (ac ==  5)
 		data->n_must_eat = -1;
 	else
@@ -79,20 +81,30 @@ int	init_philosopher(t_data *data, t_philo *philosopher)
 		else
 			philosopher[i].lfork = i - 1;
 		philosopher[i].meal_counter = 0;
-		philosopher[i].data = data;
+		philosopher[i].last_meals = 0;
+		philosopher[i].data = *(data);
 		philosopher[i].fork = fork;
+		philosopher[i].status = 0;
 	}
 	return (0);
 }
 
 int init_values(int ac, char **av, t_data *data, t_philo *philosopher)
 {
+	int i;
+
+	i = 0;
 	data = malloc(sizeof(t_data));
 	if (init_data(ac, av, data) != 0)
 		return (1);
+	philosopher = malloc(sizeof(t_philo) * data->n_philosopher);
 	if (init_philosopher(data, philosopher) != 0)
 		return (1);
 	if (init_threads(data, philosopher) != 0)
 		return (1);
+	while (++i < data->N_MUTEX)
+		pthread_mutex_destroy(&data->mutex[i]);
+	while (++i < data->n_philosopher)
+		pthread_mutex_destroy(&philosopher->fork[i]);
 	return (0);
 }

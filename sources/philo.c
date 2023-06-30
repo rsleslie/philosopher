@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "../includes/philo.h"
 
 int main(int argc, char **argv)
 {
@@ -11,6 +11,5 @@ int main(int argc, char **argv)
 		return (1);
 	if (init_values(argc, argv, data, philosopher) != 0)
 		return (1);
-	if	()
 	return (0);
 }

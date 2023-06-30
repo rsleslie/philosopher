@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "../includes/philo.h"
 
 int	check_args(int argc, char **argv)
 {

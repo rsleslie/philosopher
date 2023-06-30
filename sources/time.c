@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "../includes/philo.h"
 
 int	time_begin(struct timeval start)
 {
