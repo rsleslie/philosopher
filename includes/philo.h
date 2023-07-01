@@ -9,6 +9,8 @@
 # include <unistd.h>
 # include <limits.h>
 
+
+
 typedef struct s_data
 {
 	int				t_die;
@@ -18,8 +20,7 @@ typedef struct s_data
 	int				n_must_eat;
 	int				n_philosopher;
 	int				status;
-	struct timeval	start;
-	unsigned long	t_begin;
+	void			*philo_data;
 	pthread_t		*list_th;
 	pthread_mutex_t	*mutex;
 }   t_data;
@@ -32,7 +33,9 @@ typedef struct s_philo
 	long			last_meals;
 	int             meal_counter;
 	int             status;
-	t_data          data;
+	unsigned long	t_begin;
+	struct timeval	start;
+	t_data          *data;
 	pthread_mutex_t *fork;
 } t_philo;
 
@@ -55,8 +58,8 @@ int		time_begin(struct timeval start);
 void	*routine(void *arg);
 int		eating(t_philo *philo);
 void	ft_print(t_philo *philo, char *s);
-int		observer(t_philo *philo, t_data *data);
-int		ft_sleep(t_philo philo);
+int		observer(t_philo *philo);
+int		ft_sleep(t_philo *philo);
 int		ft_check(t_philo *philo);
 int		eat(t_philo *philo);
 

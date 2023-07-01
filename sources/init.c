@@ -14,13 +14,6 @@ int	init_threads(t_data *data, t_philo *philo)
 		if (pthread_create(&th[i], NULL, &routine, &philo[i]) != 0)
 			return (1);
 	}
-	// if (observer(philo) == 1)
-	// {
-	// 	i = -1;
-	// 	while (++i < data->n_philosopher)
-	// 		pthread_detach(th[i]);
-	// 	return (0);		
-	// }
 	i = -1;
 	while (++i < data->n_philosopher)
 		pthread_join(th[i], NULL);
@@ -48,7 +41,7 @@ int init_data(int ac, char **argv, t_data *data)
 	data->t_die = ft_atol(argv[2]);
 	data->t_eat = ft_atol(argv[3]);
 	data->t_slp = ft_atol(argv[4]);
-	data->N_MUTEX = 8;
+	data->N_MUTEX = 13;
 	data->status = 1;
 	if (ac ==  5)
 		data->n_must_eat = -1;
@@ -82,7 +75,7 @@ int	init_philosopher(t_data *data, t_philo *philosopher)
 			philosopher[i].lfork = i - 1;
 		philosopher[i].meal_counter = 0;
 		philosopher[i].last_meals = 0;
-		philosopher[i].data = *(data);
+		philosopher[i].data = data;
 		philosopher[i].fork = fork;
 		philosopher[i].status = 0;
 	}
