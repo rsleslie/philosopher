@@ -6,11 +6,23 @@
 /*   By: rleslie- <rleslie-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 17:55:54 by rleslie-          #+#    #+#             */
-/*   Updated: 2023/07/02 20:41:31 by rleslie-         ###   ########.fr       */
+/*   Updated: 2023/07/02 21:35:09 by rleslie-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+int	check_status(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->mutex[4]);
+	if (philo->data->status == 0)
+	{
+		pthread_mutex_unlock(&philo->data->mutex[4]);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->mutex[4]);
+	return (0);
+}
 
 long	ft_atol(char const *str)
 {

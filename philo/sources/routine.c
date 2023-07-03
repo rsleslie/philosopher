@@ -6,7 +6,7 @@
 /*   By: rleslie- <rleslie-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 18:00:37 by rleslie-          #+#    #+#             */
-/*   Updated: 2023/07/02 21:05:19 by rleslie-         ###   ########.fr       */
+/*   Updated: 2023/07/02 21:42:33 by rleslie-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,12 @@ int	is_died(t_philo *philo, int i)
 	pthread_mutex_unlock(&philo[i].data->mutex[3]);
 	if ((time_begin() - died) >= philo[0].data[0].t_die)
 	{
-		ft_print(&philo[i], "died");
 		pthread_mutex_lock(&philo[i].data->mutex[4]);
 		philo[0].data->status = 0;
 		pthread_mutex_unlock(&philo[i].data->mutex[4]);
+		pthread_mutex_lock(&philo->data->mutex[0]);
+		printf("%lu\t%i\tdied\n", (time_begin() - philo->t_begin), philo->id);
+		pthread_mutex_unlock(&philo->data->mutex[0]);
 		return (1);
 	}
 	return (0);
@@ -80,22 +82,10 @@ void	*observer(void *arg)
 			break ;
 		if (i == philo[0].data->n_philosopher - 1)
 			counter = 0;
-		i++;
 		usleep(10000);
+		i++;
 	}
 	return (NULL);
-}
-
-int	check_status(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->data->mutex[4]);
-	if (philo->data->status == 0)
-	{
-		pthread_mutex_unlock(&philo->data->mutex[4]);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->data->mutex[4]);
-	return (0);
 }
 
 void	*routine(void *arg)
